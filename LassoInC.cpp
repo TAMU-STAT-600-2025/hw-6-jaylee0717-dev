@@ -17,6 +17,10 @@ double soft_c(double a, double lambda){
 // [[Rcpp::export]]
 double lasso_c(const arma::mat& Xtilde, const arma::colvec& Ytilde, const arma::colvec& beta, double lambda){
   // Your function code goes here
+  int n = Xtilde.n_rows;
+  
+  arma::colvec resid = Ytilde - Xtilde * beta;
+  return arma::dot(resid, resid) / (2.0 * n) + lambda * arma::accu(arma::abs(beta));
 }
 
 
