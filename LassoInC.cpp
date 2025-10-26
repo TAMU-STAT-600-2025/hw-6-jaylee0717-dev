@@ -54,7 +54,7 @@ arma::colvec fitLASSOstandardized_c(const arma::mat& Xtilde, const arma::colvec&
     for (int j = 0; j < p; j++) {
       arma::colvec xj = Xtilde.col(j);
       arma::colvec partial_resid = resid + xj * beta[j];
-      beta_new[j] = soft_c(arma::dot(xj, partial_resid) / n;, lambda);
+      beta_new[j] = soft_c(arma::dot(xj, partial_resid) / n, lambda);
       
       // Update residuals incrementally
       resid -= xj * (beta_new[j] - beta[j]);
@@ -79,4 +79,17 @@ arma::colvec fitLASSOstandardized_c(const arma::mat& Xtilde, const arma::colvec&
 // [[Rcpp::export]]
 arma::mat fitLASSOstandardized_seq_c(const arma::mat& Xtilde, const arma::colvec& Ytilde, const arma::colvec& lambda_seq, double eps = 0.001){
   // Your function code goes here
+  int n = Xtilde.n_rows;
+  int p = Xtilde.n_cols;
+  
+  if (Ytilde.n_rows != n)
+    stop("Number of rows in Xtilde and Ytilde must match");
+  
+  int n_lambda = lambda_seq.n_elem;
+  arma::mat beta_mat(p, n_lambda, arma::fill::zeros);
+  
+  arma::colvec beta_start(p, arma::fill::zeros);
+  
+  
+  
 }
