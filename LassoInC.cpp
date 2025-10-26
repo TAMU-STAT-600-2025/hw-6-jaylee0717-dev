@@ -41,6 +41,34 @@ arma::colvec fitLASSOstandardized_c(const arma::mat& Xtilde, const arma::colvec&
   if (beta_start.n_rows != p) {
     stop("Length of beta_start must match number of columns in Xtilde");
   }
+  
+  arma::colvec beta = beta_start;
+  arma::colvec beta_new = beta_start;
+  arma::colvec resid = Ytilde - Xtilde * beta;
+  
+  double fval_old = lasso_c(Xtilde, Ytilde, beta, lambda);
+  double fval_new;
+  
+  // Coordinate descent loop
+  while (true) {
+    for (int j = 0; j < p; j++) {
+      arma::colvec xj = Xtilde.col(j);
+      arma::colvec partial_resid = resid + xj * beta[j];
+      beta_new[j] = soft_c(arma::dot(xj, partial_resid) / n;, lambda);
+      
+      // Update residuals incrementally
+      resid -= xj * (beta_new[j] - beta[j]);
+      beta[j] = beta_new[j];
+    }
+    
+    fval_new = lasso_c(Xtilde, Ytilde, beta_new, lambda);
+    if (std::abs(fval_old - fval_new) < eps) {
+      break;
+    }
+    fval_old = fval_new;
+  }
+  
+  return beta;
 }  
 
 
