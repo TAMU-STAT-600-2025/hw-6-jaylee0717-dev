@@ -90,6 +90,13 @@ arma::mat fitLASSOstandardized_seq_c(const arma::mat& Xtilde, const arma::colvec
   
   arma::colvec beta_start(p, arma::fill::zeros);
   
+  for (int i = 0; i < n_lambda; i++) {
+    double lambda = lambda_seq[i];
+    arma::colvec beta = fitLASSOstandardized_c(Xtilde, Ytilde, lambda, beta_start, eps);
+    beta_mat.col(i) = beta;
+    beta_start = beta;
+  }
   
+  return beta_mat;
   
 }
