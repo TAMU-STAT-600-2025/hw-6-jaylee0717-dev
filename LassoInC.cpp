@@ -29,6 +29,18 @@ double lasso_c(const arma::mat& Xtilde, const arma::colvec& Ytilde, const arma::
 // [[Rcpp::export]]
 arma::colvec fitLASSOstandardized_c(const arma::mat& Xtilde, const arma::colvec& Ytilde, double lambda, const arma::colvec& beta_start, double eps = 0.001){
   // Your function code goes here
+  int n = Xtilde.n_rows;
+  int p = Xtilde.n_cols;
+  
+  if (Ytilde.n_rows != n) {
+    stop("Number of rows in Xtilde and Ytilde must match");
+  }
+  if (lambda < 0) {
+    stop("Lambda should be nonnegative.");
+  }
+  if (beta_start.n_rows != p) {
+    stop("Length of beta_start must match number of columns in Xtilde");
+  }
 }  
 
 
