@@ -32,13 +32,13 @@ arma::colvec fitLASSOstandardized_c(const arma::mat& Xtilde, const arma::colvec&
   int n = Xtilde.n_rows;
   int p = Xtilde.n_cols;
   
-  if (Ytilde.n_rows != n) {
+  if ((int)Ytilde.n_rows != n) {
     stop("Number of rows in Xtilde and Ytilde must match");
   }
   if (lambda < 0) {
     stop("Lambda should be nonnegative.");
   }
-  if (beta_start.n_rows != p) {
+  if ((int)beta_start.n_rows != p) {
     stop("Length of beta_start must match number of columns in Xtilde");
   }
   
@@ -82,7 +82,7 @@ arma::mat fitLASSOstandardized_seq_c(const arma::mat& Xtilde, const arma::colvec
   int n = Xtilde.n_rows;
   int p = Xtilde.n_cols;
   
-  if (Ytilde.n_rows != n)
+  if ((int)Ytilde.n_rows != n)
     stop("Number of rows in Xtilde and Ytilde must match");
   
   int n_lambda = lambda_seq.n_elem;
@@ -98,5 +98,4 @@ arma::mat fitLASSOstandardized_seq_c(const arma::mat& Xtilde, const arma::colvec
   }
   
   return beta_mat;
-  
 }
