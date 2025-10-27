@@ -70,6 +70,22 @@ cat("Test 2:", all.equal(as.numeric(fit_r2$beta), as.numeric(fit_c2)), "\n")
 
 # Do microbenchmark on fitLASSOstandardized vs fitLASSOstandardized_c
 ######################################################################
+X <- matrix(rnorm(5000), nrow = 100, ncol = 50)
+Y <- rnorm(100)
+lambda <- 0.05
+
+# Benchmark
+bench1 <- microbenchmark(
+  R = fitLASSOstandardized(X, Y, lambda),
+  Cpp = fitLASSOstandardized_c(X, Y, lambda, rep(0, ncol(X))),
+  times = 10
+)
+print(bench1)
+cat("\nSpeedup (median R / median C++) =", 
+    round(median(bench1$time[bench1$expr == "R"]) / 
+            median(bench1$time[bench1$expr == "Cpp"]), 2), "x faster\n")
+
+
 
 # Do at least 2 tests for fitLASSOstandardized_seq function below. You are checking output agreements on at least 2 separate inputs
 #################################################
