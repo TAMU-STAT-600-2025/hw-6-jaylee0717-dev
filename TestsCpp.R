@@ -26,7 +26,27 @@ cat("Test 2:", all.equal(r_soft2, cpp_soft2), "\n")
 
 # Do at least 2 tests for lasso objective function below. You are checking output agreements on at least 2 separate inputs
 #################################################
+set.seed(42)
 
+# Test 1
+X <- matrix(rnorm(20), nrow = 5)
+Y <- rnorm(5)
+beta <- rnorm(4)
+lambda <- 0.1
+
+r_lasso1 <- lasso(X, Y, beta, lambda)
+cpp_lasso1 <- lasso_c(X, Y, beta, lambda)
+cat("Test 1:", all.equal(as.numeric(r_lasso1), cpp_lasso1), "\n")
+
+# Test 2 (different random inputs)
+X2 <- matrix(rnorm(18), nrow = 6)
+Y2 <- rnorm(6)
+beta2 <- runif(3)
+lambda2 <- 0.5
+
+r_lasso2 <- lasso(X2, Y2, beta2, lambda2)
+cpp_lasso2 <- lasso_c(X2, Y2, beta2, lambda2)
+cat("Test 2:", all.equal(as.numeric(r_lasso2), cpp_lasso2), "\n")
 
 # Do at least 2 tests for fitLASSOstandardized function below. You are checking output agreements on at least 2 separate inputs
 #################################################
@@ -58,5 +78,5 @@ outl <- fitLASSOstandardized_seq(out$Xtilde, out$Ytilde, n_lambda = 30)
 microbenchmark(
   fitLASSOstandardized_seq(out$Xtilde, out$Ytilde, outl$lambda_seq),
   fitLASSOstandardized_seq_c(out$Xtilde, out$Ytilde, outl$lambda_seq),
-  times = 10
+  times = 1
 )
