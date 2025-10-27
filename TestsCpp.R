@@ -81,10 +81,6 @@ bench1 <- microbenchmark(
   times = 10
 )
 print(bench1)
-cat("\nSpeedup (median R / median C++) =", 
-    round(median(bench1$time[bench1$expr == "R"]) / 
-            median(bench1$time[bench1$expr == "Cpp"]), 2), "x faster\n")
-
 
 
 # Do at least 2 tests for fitLASSOstandardized_seq function below. You are checking output agreements on at least 2 separate inputs
@@ -115,6 +111,18 @@ cat("Test 2: beta matrix equality =",
 
 # Do microbenchmark on fitLASSOstandardized_seq vs fitLASSOstandardized_seq_c
 ######################################################################
+set.seed(2025)
+Xb <- matrix(rnorm(1000), nrow = 50, ncol = 20)
+Yb <- rnorm(50)
+lambda_seq_b <- exp(seq(log(1), log(0.01), length.out = 10))
+
+bench2 <- microbenchmark(
+  R = fitLASSOstandardized_seq(Xb, Yb, lambda_seq_b),
+  Cpp = fitLASSOstandardized_seq_c(Xb, Yb, lambda_seq_b),
+  times = 5
+)
+print(bench2)
+
 
 # Tests on riboflavin data
 ##########################
@@ -134,5 +142,5 @@ outl <- fitLASSOstandardized_seq(out$Xtilde, out$Ytilde, n_lambda = 30)
 microbenchmark(
   fitLASSOstandardized_seq(out$Xtilde, out$Ytilde, outl$lambda_seq),
   fitLASSOstandardized_seq_c(out$Xtilde, out$Ytilde, outl$lambda_seq),
-  times = 1
+  times = 10
 )
