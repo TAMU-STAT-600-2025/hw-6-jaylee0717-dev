@@ -2,6 +2,7 @@
 # Header for Rcpp and RcppArmadillo
 library(Rcpp)
 library(RcppArmadillo)
+library("microbenchmark")
 
 # Source your C++ funcitons
 sourceCpp("LassoInC.cpp")
@@ -11,7 +12,17 @@ source("LassoFunctions.R")
 
 # Do at least 2 tests for soft-thresholding function below. You are checking output agreements on at least 2 separate inputs
 #################################################
+# Test 1
+a1 <- 3; lambda1 <- 1
+r_soft1 <- soft(a1, lambda1)
+cpp_soft1 <- soft_c(a1, lambda1)
+cat("Test 1:", all.equal(r_soft1, cpp_soft1), "\n")
 
+# Test 2
+a2 <- -0.5; lambda2 <- 1
+r_soft2 <- soft(a2, lambda2)
+cpp_soft2 <- soft_c(a2, lambda2)
+cat("Test 2:", all.equal(r_soft2, cpp_soft2), "\n")
 
 # Do at least 2 tests for lasso objective function below. You are checking output agreements on at least 2 separate inputs
 #################################################
