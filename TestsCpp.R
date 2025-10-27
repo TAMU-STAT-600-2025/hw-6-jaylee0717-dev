@@ -50,6 +50,23 @@ cat("Test 2:", all.equal(as.numeric(r_lasso2), cpp_lasso2), "\n")
 
 # Do at least 2 tests for fitLASSOstandardized function below. You are checking output agreements on at least 2 separate inputs
 #################################################
+set.seed(99)
+X3 <- matrix(rnorm(30), nrow = 10, ncol = 3)
+Y3 <- rnorm(10)
+lambda3 <- 0.1
+
+# Test 1: zero start
+fit_r1 <- fitLASSOstandardized(X3, Y3, lambda3)
+fit_c1 <- fitLASSOstandardized_c(X3, Y3, lambda3, rep(0, ncol(X3)))
+cat("Test 1:", all.equal(as.numeric(fit_r1$beta), as.numeric(fit_c1)), "\n")
+
+# Test 2: random start
+beta_start <- runif(ncol(X3))
+fit_r2 <- fitLASSOstandardized(X3, Y3, lambda3, beta_start)
+fit_c2 <- fitLASSOstandardized_c(X3, Y3, lambda3, beta_start)
+cat("Test 2:", all.equal(as.numeric(fit_r2$beta), as.numeric(fit_c2)), "\n")
+
+
 
 # Do microbenchmark on fitLASSOstandardized vs fitLASSOstandardized_c
 ######################################################################
