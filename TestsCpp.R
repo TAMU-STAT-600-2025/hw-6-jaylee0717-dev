@@ -89,6 +89,29 @@ cat("\nSpeedup (median R / median C++) =",
 
 # Do at least 2 tests for fitLASSOstandardized_seq function below. You are checking output agreements on at least 2 separate inputs
 #################################################
+set.seed(99)
+X2 <- matrix(rnorm(100), nrow = 20, ncol = 5)
+Y2 <- rnorm(20)
+lambda_seq <- exp(seq(log(1), log(0.01), length.out = 5))
+
+# Test 1
+fit_seq_R1 <- fitLASSOstandardized_seq(X2, Y2, lambda_seq)
+fit_seq_C1 <- fitLASSOstandardized_seq_c(X2, Y2, lambda_seq)
+cat("Test 1: beta matrix equality =", 
+    all.equal(as.numeric(fit_seq_R1$beta_mat), as.numeric(fit_seq_C1)), "\n")
+
+# Test 2: smaller problem, different random data
+set.seed(101)
+X3 <- matrix(rnorm(60), nrow = 12, ncol = 5)
+Y3 <- rnorm(12)
+lambda_seq2 <- exp(seq(log(0.5), log(0.05), length.out = 4))
+
+fit_seq_R2 <- fitLASSOstandardized_seq(X3, Y3, lambda_seq2)
+fit_seq_C2 <- fitLASSOstandardized_seq_c(X3, Y3, lambda_seq2)
+cat("Test 2: beta matrix equality =", 
+    all.equal(as.numeric(fit_seq_R2$beta_mat), as.numeric(fit_seq_C2)), "\n")
+
+
 
 # Do microbenchmark on fitLASSOstandardized_seq vs fitLASSOstandardized_seq_c
 ######################################################################
