@@ -70,40 +70,45 @@ cat("Test 2:", all.equal(as.numeric(fit_r2$beta), as.numeric(fit_c2)), "\n")
 
 # Do microbenchmark on fitLASSOstandardized vs fitLASSOstandardized_c
 ######################################################################
-X <- matrix(rnorm(5000), nrow = 100, ncol = 50)
-Y <- rnorm(100)
-lambda <- 0.05
 
 # Benchmark
 bench1 <- microbenchmark(
-  R = fitLASSOstandardized(X, Y, lambda),
-  Cpp = fitLASSOstandardized_c(X, Y, lambda, rep(0, ncol(X))),
+  R = fitLASSOstandardized(X2, Y2, lambda3),
+  Cpp = fitLASSOstandardized_c(X2, Y2, lambda3, rep(0, ncol(X2))),
   times = 10
 )
 print(bench1)
+
+bench2 <- microbenchmark(
+  R = fitLASSOstandardized(X3, Y3, lambda3),
+  Cpp = fitLASSOstandardized_c(X3, Y3, lambda3, rep(0, ncol(X3))),
+  times = 10
+)
+print(bench2)
+
 
 
 # Do at least 2 tests for fitLASSOstandardized_seq function below. You are checking output agreements on at least 2 separate inputs
 #################################################
 set.seed(99)
-X2 <- matrix(rnorm(100), nrow = 20, ncol = 5)
-Y2 <- rnorm(20)
+X4 <- matrix(rnorm(100), nrow = 20, ncol = 5)
+Y4 <- rnorm(20)
 lambda_seq <- exp(seq(log(1), log(0.01), length.out = 5))
 
 # Test 1
-fit_seq_R1 <- fitLASSOstandardized_seq(X2, Y2, lambda_seq)
-fit_seq_C1 <- fitLASSOstandardized_seq_c(X2, Y2, lambda_seq)
+fit_seq_R1 <- fitLASSOstandardized_seq(X4, Y4, lambda_seq)
+fit_seq_C1 <- fitLASSOstandardized_seq_c(X4, Y4, lambda_seq)
 cat("Test 1: beta matrix equality =", 
     all.equal(as.numeric(fit_seq_R1$beta_mat), as.numeric(fit_seq_C1)), "\n")
 
 # Test 2: smaller problem, different random data
 set.seed(101)
-X3 <- matrix(rnorm(60), nrow = 12, ncol = 5)
-Y3 <- rnorm(12)
+X5 <- matrix(rnorm(60), nrow = 12, ncol = 5)
+Y5 <- rnorm(12)
 lambda_seq2 <- exp(seq(log(0.5), log(0.05), length.out = 4))
 
-fit_seq_R2 <- fitLASSOstandardized_seq(X3, Y3, lambda_seq2)
-fit_seq_C2 <- fitLASSOstandardized_seq_c(X3, Y3, lambda_seq2)
+fit_seq_R2 <- fitLASSOstandardized_seq(X5, Y5, lambda_seq2)
+fit_seq_C2 <- fitLASSOstandardized_seq_c(X5, Y5, lambda_seq2)
 cat("Test 2: beta matrix equality =", 
     all.equal(as.numeric(fit_seq_R2$beta_mat), as.numeric(fit_seq_C2)), "\n")
 
@@ -111,17 +116,19 @@ cat("Test 2: beta matrix equality =",
 
 # Do microbenchmark on fitLASSOstandardized_seq vs fitLASSOstandardized_seq_c
 ######################################################################
-set.seed(2025)
-Xb <- matrix(rnorm(1000), nrow = 50, ncol = 20)
-Yb <- rnorm(50)
-lambda_seq_b <- exp(seq(log(1), log(0.01), length.out = 10))
-
-bench2 <- microbenchmark(
-  R = fitLASSOstandardized_seq(Xb, Yb, lambda_seq_b),
-  Cpp = fitLASSOstandardized_seq_c(Xb, Yb, lambda_seq_b),
+bench3 <- microbenchmark(
+  R = fitLASSOstandardized_seq(X4, Y4, lambda_seq),
+  Cpp = fitLASSOstandardized_seq_c(X4, Y4, lambda_seq),
   times = 5
 )
-print(bench2)
+print(bench3)
+
+bench4 <- microbenchmark(
+  R = fitLASSOstandardized_seq(X5, Y5, lambda_seq2),
+  Cpp = fitLASSOstandardized_seq_c(X5, Y5, lambda_seq2),
+  times = 5
+)
+print(bench4)
 
 
 # Tests on riboflavin data
