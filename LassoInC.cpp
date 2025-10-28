@@ -12,7 +12,6 @@ double soft_c(double a, double lambda){
 }
 
 
-
 // Lasso objective function, returns scalar
 // [[Rcpp::export]]
 double lasso_c(const arma::mat& Xtilde, const arma::colvec& Ytilde, const arma::colvec& beta, double lambda){
@@ -22,7 +21,6 @@ double lasso_c(const arma::mat& Xtilde, const arma::colvec& Ytilde, const arma::
   arma::colvec resid = Ytilde - Xtilde * beta;
   return arma::dot(resid, resid) / (2.0 * n) + lambda * arma::accu(arma::abs(beta));
 }
-
 
 
 // Lasso coordinate-descent on standardized data with one lamdba. Returns a vector beta.
@@ -72,7 +70,6 @@ arma::colvec fitLASSOstandardized_c(const arma::mat& Xtilde, const arma::colvec&
 }  
 
 
-
 // Lasso coordinate-descent on standardized data with supplied lambda_seq. 
 // You can assume that the supplied lambda_seq is already sorted from largest to smallest, and has no negative values.
 // Returns a matrix beta (p by number of lambdas in the sequence)
@@ -96,6 +93,5 @@ arma::mat fitLASSOstandardized_seq_c(const arma::mat& Xtilde, const arma::colvec
     beta_mat.col(i) = beta;
     beta_start = beta;
   }
-  
   return beta_mat;
 }
